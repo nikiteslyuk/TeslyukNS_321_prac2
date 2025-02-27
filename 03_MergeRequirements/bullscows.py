@@ -47,15 +47,13 @@ def load_words(source: str, length: int) -> list[str]:
 def ask(prompt, valid=None):
     local_attempts = 0
     while True:
-        cow_type = random.choice(cowsay.list_cows())
-        print(cowsay.cowsay(prompt, cow=cow_type))
+        with open("eva.cow", "r") as f:
+            print(cowsay.cowsay(prompt, cowfile=cowsay.read_dot_cow(f)))
         inp = input().strip().lower()
         local_attempts += 1
         if valid is None or inp in valid:
             return inp, local_attempts
-        print(
-            cowsay.cowsay("Некорректное слово.", cow=random.choice(cowsay.list_cows()))
-        )
+        print(cowsay.cowsay("Некорректное слово.", cowfile=cowsay.read_dot_cow(f)))
 
 
 def inform(fmt, bulls, cows):
