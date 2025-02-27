@@ -1,4 +1,5 @@
 import random
+import cowsay
 import urllib.request
 import argparse
 from collections import Counter
@@ -15,10 +16,10 @@ def bullscows(guess: str, secret: str) -> (int, int):
 
 def gameplay(ask, inform, words: list[str]) -> int:
     secret = random.choice(words)
-    # print(secret)
+    print(secret)
     attempts = 0
     while True:
-        guess, local_attempts = ask("Слово: ", words)
+        guess, local_attempts = ask("Введите слово", words)
         attempts += local_attempts
         b, c = bullscows(guess, secret)
         if guess == secret:
@@ -46,15 +47,21 @@ def load_words(source: str, length: int) -> list[str]:
 def ask(prompt, valid=None):
     local_attempts = 0
     while True:
-        inp = input(prompt).strip().lower()
+        cow_type = random.choice(cowsay.list_cows())
+        print(cowsay.cowsay(prompt, cow=cow_type))
+        inp = input().strip().lower()
         local_attempts += 1
         if valid is None or inp in valid:
             return inp, local_attempts
-        print("Некорректное слово.")
+        print(
+            cowsay.cowsay("Некорректное слово.", cow=random.choice(cowsay.list_cows()))
+        )
 
 
 def inform(fmt, bulls, cows):
-    print(fmt.format(bulls, cows))
+    message = fmt.format(bulls, cows)
+    cow_type = random.choice(cowsay.list_cows())
+    print(cowsay.cowsay(message, cow=cow_type))
 
 
 parser = argparse.ArgumentParser()
